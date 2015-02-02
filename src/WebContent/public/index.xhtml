@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" template="template/layout.xhtml">
+
+	<ui:define name="title">
+      CGWAP - #{msg.home}
+    </ui:define>
+
+	<ui:define name="content">
+
+
+
+
+		<!-- Jumbotron -->
+		<div class="jumbotron">
+			<h1>#{msg.welcome}</h1>
+			<BR />
+			<p>#{msg.welcome_message}</p>
+			<BR />
+			<div class="col-md-12">
+				<h:link class="center btn btn-lg btn-warning col-md-2 col-md-offset-3" outcome="asking">#{msg.asking}</h:link>
+
+				<div class="lead col-md-2">or</div>
+
+				<h:link class="center btn btn-lg btn-info col-md-2" outcome="answering">#{msg.answering}</h:link>
+			</div>
+		</div>
+
+
+		<!-- Highest XP Highscore -->
+		<div class="col-md-5">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h3>#{msg.bestPlayers}</h3>
+
+					<h:form id="player-highscore" name="player-highscore">
+
+						<h:dataTable id="bestPlayers" value="#{highscoreAction.getBestPlayers()}" var="highscoreEntry"
+							styleClass="table table-condensed table-striped ticket-list">
+							
+							
+							 <!-- display currently selected row number -->
+<!--                 <f:facet name="header">No</f:facet> -->
+<!--                 #{person.personList.rowIndex + 1} -->
+								<h:column>
+										<f:facet name="header">#{msg.nickname}</f:facet>
+										<h:outputText value="#{highscoreEntry.nickname}" />
+									</h:column> <h:column>
+										<f:facet name="header">#{msg.xpHigh}</f:facet>
+										<h:outputText value="#{highscoreEntry.xp}" />
+									</h:column> <h:column>
+										<f:facet name="header">#{msg.level}</f:facet>
+										<h:outputText value="#{highscoreEntry.level}" />
+									</h:column>
+						
+						</h:dataTable>
+
+					</h:form>
+
+				</div>
+
+			</div>
+		</div>
+
+
+		<!-- Fastest Round Highscore -->
+		<div class="col-sm-7">
+
+			<div class="panel panel-default">
+				<div class="panel-body">
+
+					<h3>#{msg.bestRounds}</h3>
+
+					<h:form id="rounds-highscore" name="rounds-highscore">
+
+						<h:dataTable id="bestRounds" value="#{highscoreAction.getBestRounds()}" var="highscoreEntry"
+							styleClass="table table-condensed table-striped ticket-list">
+
+
+							<h:column>
+								<f:facet name="header">#{msg.nickname}</f:facet>
+								<h:outputText value="#{highscoreEntry.nickname}" />
+							</h:column>
+
+							<h:column>
+								<f:facet name="header">#{msg.question}</f:facet>
+								<h:outputText value="#{highscoreEntry.text}" />
+							</h:column>
+
+							<h:column>
+								<f:facet name="header">#{msg.duration}</f:facet>
+								<h:outputText value="#{highscoreEntry.duration}s" />
+							</h:column>
+
+							<!-- 							<h:column> -->
+							<!-- 								<f:facet name="header">#{msg.score}</f:facet> -->
+							<!-- 								<h:outputText value="#{highscoreEntry.score}s" /> -->
+							<!-- 							</h:column> -->
+
+
+							<!-- only visible if active user has answered this question before -->
+							<h:column>
+								<f:facet name="header">#{msg.how}</f:facet>
+								<ui:fragment rendered="#{highscoreEntry.allowedToSee}">
+									<div class="btn-group">
+										<h:commandButton styleClass="btn btn-info btn-xs" action="#{highscoreAction.getQueries(highscoreEntry)}"
+											value="#{msg.how}"></h:commandButton>
+										<!--                                                <h:commandLink styleClass="btn btn-info btn-xs" value="#{msg.reset}" -->
+										<!--                                                    id="resetPasswordBtn"></h:commandLink> -->
+									</div>
+								</ui:fragment>
+								<ui:fragment rendered="#{!highscoreEntry.allowedToSee}">
+									<extra-small>#{msg.notAllowed}</extra-small>
+
+								</ui:fragment>
+
+							</h:column>
+						</h:dataTable>
+					</h:form>
+
+
+					<h:panelGroup rendered="#{highscoreAction.lookAtQueries}">
+
+						<h:dataTable id="queries" value="#{highscoreAction.queries}" var="query"
+							styleClass="table table-condensed table-striped ticket-list">
+							<h:column>
+								<f:facet name="header">#{msg.queryFor} #{highscoreAction.currentQuestion.questionText}</f:facet>
+								<h:outputText value="#{query.query}" />
+							</h:column>
+							<!-- possible to add filter, time between queries, etc. -->
+						</h:dataTable>
+
+					</h:panelGroup>
+
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

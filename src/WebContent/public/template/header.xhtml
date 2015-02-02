@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:form>
+
+		<div class="masthead">
+			<h3 class="text-muted">CGWAP</h3>
+			<h:panelGroup rendered="#{sessionBean.loggedIn}">
+				<ul class="nav nav-justified">
+					<li><h:link outcome="index">
+							<span class="glyphicon glyphicon-home"></span>   #{msg.home}</h:link></li>
+					<li><h:link outcome="asking">
+							<span class="glyphicon glyphicon-question-sign"></span> #{msg.asking}</h:link></li>
+					<li><h:link outcome="answering">
+							<span class="glyphicon glyphicon-exclamation-sign"></span> #{msg.answering}</h:link></li>
+					<li><h:link outcome="userProfile">
+							<span class="glyphicon glyphicon-user"></span> #{msg.userProfile}</h:link></li>
+					<li><h:commandLink outcome="logout" action="#{userAction.logout()}">
+							<span class="glyphicon glyphicon-minus-sign"></span> #{msg.logout}</h:commandLink></li>
+				</ul>
+			</h:panelGroup>
+
+
+			<h:panelGroup rendered="#{!sessionBean.loggedIn}">
+				<ul class="nav nav-justified">
+					<li><h:link outcome="index">
+							<span class="glyphicon glyphicon-home"></span>   #{msg.home}</h:link></li>
+					<li><h:link outcome="asking">
+							<span class="glyphicon glyphicon-question-sign"></span> #{msg.asking}</h:link></li>
+					<li><h:link outcome="answering">
+							<span class="glyphicon glyphicon-exclamation-sign"></span> #{msg.answering}</h:link></li>
+					<li><h:link outcome="login">
+							<span class="glyphicon glyphicon-log-in"></span> #{msg.login}</h:link></li>
+					<li><h:link outcome="register">
+							<span class="glyphicon glyphicon-heart"></span> #{msg.signup}</h:link></li>
+				</ul>
+			</h:panelGroup>
+		</div>
+
+
+	</h:form>
+	<!-- show only for global info messages -->
+	<h:panelGroup layout="block" rendered="#{sessionBean.hasInfoMessage}" class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">x</button>
+		<h:messages globalOnly="true" layout="list" />
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" rendered="#{sessionBean.hasLevelMessage}" class="alert alert-info">
+		<button type="button" class="close" data-dismiss="alert">x</button>
+		<h4>#{msg.levelUpMessage}</h4>
+		<h:messages globalOnly="true" layout="list" />
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" rendered="#{sessionBean.hasErrorMessage}" class="alert alert-warning">
+		<button type="button" class="close" data-dismiss="alert">x</button>
+		<h4>#{msg.sorry}</h4>
+		<h:messages globalOnly="true" layout="list" />
+	</h:panelGroup>
+
+</ui:composition>

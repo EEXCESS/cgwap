@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough" template="template/layout.xhtml">
+
+
+	<!-- start bean initialization -->
+	<f:metadata>
+		<f:viewParam name="questionId" value="#{askingAction.question.id}" />
+		<f:viewAction action="#{askingAction.initQuestion() }" />
+	</f:metadata>
+	<!-- end bean initialization -->
+
+	<ui:define name="title">
+      CGWAP - #{msg.asking}
+    </ui:define>
+
+	<ui:define name="content">
+		<h3>#{msg.askFollowUpHeaderText}</h3>
+		<div class="jumbotron">
+
+
+			<!-- Not yet logged in. -->
+			<h:panelGroup rendered="#{!sessionBean.loggedIn}">
+				<p class="lead">#{msg.askNotLoggedInText}</p>
+				<p>
+					<h:link styleClass="btn btn-success" outcome="register" value="#{msg.signup}" />
+				</p>
+			</h:panelGroup>
+
+			<!-- Logged in. -->
+			<h:panelGroup rendered="#{sessionBean.loggedIn}">
+				<!-- Question. -->
+				<div class="form-horizontal col-md-6 form-group #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+					<h:outputLabel for="questionText" value="#{msg.prevQuestion}" />
+					<br></br>
+					<h:outputText id="previous-questionText" value="#{askingAction.question.questionText}"></h:outputText>
+
+				</div>
+
+
+
+				<!-- Question form. -->
+				<h:form id="form-question" name="form-question" class="form-horizontal col-md-6" role="form">
+
+
+					<!-- Question. -->
+					<div class="form-group #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+						<h:outputLabel for="questionText" value="#{msg.question}" />
+						<h:inputText id="questionText" value="#{askingAction.followUp.questionText}" class="form-control" required="true"
+							requiredMessage="#{msg.fieldRequired}">
+							<f:validator validatorId="questionExistsValidator" />
+						</h:inputText>
+						<h4>
+							<h:message class="label label-danger" for="questionText" />
+						</h4>
+					</div>
+
+					<!-- Answer. -->
+
+					<div class="form-group #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+						<h:outputLabel for="answerURL" value="#{msg.answerURL}" />
+						<h:inputTextarea rows="2" id="answerURL" value="#{askingAction.answer.answerUrl}" class="form-control"
+							required="true" requiredMessage="#{msg.fieldRequired}" p:placeholder="#{msg.answerURLPlaceholder}">
+							<f:validator validatorId="europeanaUrlValidator" />
+						</h:inputTextarea>
+						<h4>
+							<h:message class="label label-danger" for="answerURL" />
+						</h4>
+					</div>
+
+
+					<!-- Tags. -->
+					<div class="form-group #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+
+						<h:outputLabel for="questionTags" value="#{msg.tags}" />
+						<h:inputTextarea id="questionTags" value="#{askingAction.questionTags.tag}" class="form-control" required="true"
+							requiredMessage="#{msg.fieldRequired}" p:placeholder="#{msg.tagsPlaceholder}" />
+						<h4>
+							<h:message class="label label-danger label-xs" for="questionTags" />
+						</h4>
+					</div>
+
+					<!-- Buttons -->
+
+					<div class="control-group">
+						<h:commandLink action="#{askingAction.storeFollowers('noFollowUps')}" id="askStop" name="ask" type="submit"
+							class="btn btn-info  btn-xs">#{msg.thatsIt}
+                            <span class="glyphicon glyphicon-ok-sign"></span>
+						</h:commandLink>
+						or
+
+						<h:commandLink styleClass="btn btn-info btn-xs" action="#{askingAction.storeFollowers('hasFollowUps')}"
+							id="askMoreFollowUps" name="askFollowUps" type="submit" class="btn btn-warning btn-xs">#{msg.askOn}
+                            <span class="glyphicon  glyphicon-circle-arrow-right"></span>
+						</h:commandLink>
+					</div>
+
+				</h:form>
+			</h:panelGroup>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

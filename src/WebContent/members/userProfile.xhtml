@@ -1,0 +1,230 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="template/layout.xhtml">
+
+	<ui:define name="title">
+    TICON - #{msg.userProfile}
+  </ui:define>
+
+	<ui:define name="content">
+
+		<div class="row">
+
+			<!-- Account Data -->
+			<div class="col-sm-6 col-md-8 col-md-offset-2">
+
+				<div class="panel panel-default">
+					<div class="panel-body">
+
+						<h3>#{msg.accountData}</h3>
+
+						<h:form id="form-resetpassword" name="form-resetpassword">
+
+							<h:panelGroup layout="block"
+								rendered="#{sessionBean.hasErrorMessage and param.resetPasswordForm eq 'resetPasswordForm'}"
+								styleClass="alert alert-danger">
+								<button type="button" class="close" data-dismiss="alert">x</button>
+								<h:messages globalOnly="true" layout="table" />
+							</h:panelGroup>
+
+							<table class="table">
+
+								<thead></thead>
+
+								<tbody>
+
+									<tr>
+										<th>#{msg.nickname}</th>
+										<td><h:outputText value="#{userAction.user.nickname}" /></td>
+									</tr>
+
+									<tr>
+										<th>#{msg.registered}</th>
+										<td><h:outputText value="#{userAction.user.registered}">
+												<f:convertDateTime type="both" pattern="dd-MMM-yy" />
+											</h:outputText></td>
+										<!--                                        <td><h:commandLink styleClass="btn btn-info btn-xs" value="#{msg.change}" id="changeEmailBtn"></h:commandLink></td> -->
+									</tr>
+
+
+									<tr>
+										<th>#{msg.email}</th>
+										<td><h:outputText value="#{userAction.user.email}" /></td>
+										<!-- 										<td><h:commandLink styleClass="btn btn-info btn-xs" value="#{msg.change}" id="changeEmailBtn"></h:commandLink></td> -->
+									</tr>
+
+									<tr>
+										<th>#{msg.password}</th>
+										<td><h:outputText value="********" /></td>
+										<!-- 										<td> -->
+
+										<!-- 											<div class="btn-group"> -->
+										<!-- 												<h:link styleClass="btn btn-info btn-xs" outcome="changeUserData" value="#{msg.change}" -->
+										<!-- 													id="changePasswordBtn"></h:link> -->
+										<!-- 												                                               <h:commandLink styleClass="btn btn-info btn-xs" value="#{msg.reset}" -->
+										<!-- 												                                                   id="resetPasswordBtn"></h:commandLink> -->
+
+										<!-- 											</div> -->
+										<!-- 										</td> -->
+									</tr>
+
+									<tr>
+										<th>#{msg.level}</th>
+										<td><h:outputText value="#{userAction.user.level}" /></td>
+
+										<td>
+											<div class="progress">
+												<div class="progress-bar" style="width: #{userAction.percentToNextLevel}%"></div>
+												#{userAction.xpToNextLevel}XP to go!
+											</div>
+										</td>
+									</tr>
+
+
+								</tbody>
+							</table>
+
+						</h:form>
+
+						<h:form id="form-deleteaccount" name="form-deleteaccount">
+
+							<h:panelGroup layout="block"
+								rendered="#{sessionBean.hasErrorMessage and param.deleteAccountForm eq 'deleteAccountForm'}"
+								styleClass="alert alert-danger">
+								<button type="button" class="close" data-dismiss="alert">x</button>
+								<h:messages globalOnly="true" layout="table" />
+							</h:panelGroup>
+
+
+							<div class="pull-left">
+								<h:outputLabel rendered="#{userAction.user.isAdmin}">
+                                #{msg.isAdmin}<span class="glyphicon glyphicon-ok" style="color: green"></span>
+								</h:outputLabel>
+							</div>
+
+							<div class="pull-right">
+
+								<!-- delete account button -->
+								<h:commandLink styleClass="btn btn-danger" action="#{userAction.deleteAccount}" value="#{msg.deleteAccount}"
+									id="deleteAccountBtn" onclick="return confirm('#{msg.areYouSureToDeleteYourAccount}');" />
+
+								<!--                                help button -->
+								<!--                                <span class="badge pop helper" data-container="body" data-toggle="popover" data-placement="left" -->
+								<!--                                    data-content="#{msg.deleteAccount_help_text}" data-original-title="#{msg.help}: #{msg.deleteAccount}">?</span> -->
+
+							</div>
+
+						</h:form>
+
+					</div>
+				</div>
+			</div>
+
+
+
+
+			<!-- the user's questions -->
+			<div class="col-sm-6 col-md-6">
+
+				<div class="panel panel-default">
+					<div class="panel-body">
+
+
+						<h3>#{msg.yourQuestions}</h3>
+						<h:form>
+							<h:dataTable id="questionTable" value="#{userAction.usersAskedQuestions}"
+								rendered="#{userAction.hasAskedQuestions}" var="question"
+								styleClass="table table-condensed table-striped ticket-list">
+
+
+								<h:column>
+									<h:commandLink action="#{questionAction.initQuestion(question.id)}" styleClass="glyphicon glyphicon-edit"
+										title="#{msg.changeQuestion}" name="changeQuestionButton">
+									</h:commandLink>
+								</h:column>
+
+								<h:column>
+									<h:commandLink styleClass="glyphicon glyphicon-remove pull-right"
+										action="#{questionAction.removeQuestion(question)}">
+									</h:commandLink>
+								</h:column>
+
+
+
+								<h:column>
+									<f:facet name="header">#{msg.text}</f:facet>
+									<h:outputText value="#{question.questionText}" />
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">#{msg.date}</f:facet>
+									<h:outputText value="#{question.timestamp}">
+										<f:convertDateTime type="both" pattern="dd-MMM-yy hh:mm" />
+									</h:outputText>
+								</h:column>
+
+
+
+
+								<h:column>
+									<f:facet name="header">#{msg.reported}</f:facet>
+									<h:outputText class="pull-right" value="#{question.reported}x" />
+								</h:column>
+							</h:dataTable>
+
+
+						</h:form>
+						<ui:fragment rendered="#{!userAction.hasAskedQuestions}">
+							<h:outputText value="#{msg.nonAsked}" escape="false" />
+
+						</ui:fragment>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-6">
+
+				<div class="panel panel-default">
+					<div class="panel-body">
+
+						<h3>#{msg.yourAnsweredQuestions}</h3>
+
+
+						<h:form>
+
+							<h:dataTable rendered="#{userAction.hasAnsweredQuestions}" id="answQuestionTable"
+								value="#{userAction.usersAnsweredQuestions}" var="question"
+								styleClass="table table-condensed table-striped ticket-list">
+
+
+
+								<h:column>
+									<f:facet name="header">#{msg.text}</f:facet>
+									<h:outputText value="#{question.questionText}" />
+								</h:column>
+
+
+
+								<h:column>
+									<f:facet name="header">#{msg.difficultyRating}</f:facet>
+									<h:outputText class="pull-right" value="#{question.difficultyRating}" />
+								</h:column>
+
+
+
+							</h:dataTable>
+						</h:form>
+
+						<ui:fragment rendered="#{!userAction.hasAnsweredQuestions}">
+							<h:outputText value="#{msg.nonAnswered}" escape="false" />
+						</ui:fragment>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</ui:define>
+
+</ui:composition>

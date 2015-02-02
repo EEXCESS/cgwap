@@ -1,0 +1,286 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+body {
+	padding-bottom: 40px;
+	color: #5a5a5a;
+	background-image: url(javax.faces.resource/img/brushed.png.html);
+}
+
+/* pointer cursor ("hand pointing with finger") for context sensitive help openers */
+.helper {
+    padding: 3px 6px;
+	vertical-align: top;
+	cursor: pointer;
+}
+.helper:hover {
+	background-color: #6F6A6A;
+}
+
+/* same height */
+.thumbnail {
+	margin-top: 0.75em;
+}
+
+
+/* Login, Register, Profile, etc in top right corner */
+#header-btns {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+/* Login in top right corner */
+#login-btn {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+/* Frontpage in top left corner */
+#index-btn {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	max-width: 20%;
+}
+
+#index-btn img {
+	max-width: 100%;
+}
+
+/* fill box size */
+.thumbnail a.header {
+	width: 100%;
+}
+
+.thumbnail a.header img {
+	width: inherit;
+}
+
+/* show in one line */
+.nowrap {
+	white-space: nowrap;
+}
+
+.container {
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+}
+
+.row {
+	margin-right: -0.75em;
+	margin-left: -0.75em;
+}
+
+.rowForm {
+	border-radius: 4px;
+	padding-bottom: 12px;
+	background-color: white;
+}
+
+.col-xs-1,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-10,.col-xs-11,.col-xs-12,.col-sm-1,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-10,.col-sm-11,.col-sm-12,.col-md-1,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-10,.col-md-11,.col-md-12,.col-lg-1,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-10,.col-lg-11,.col-lg-12
+	{
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	/*padding-top: 0.75em;*/
+}
+
+/* partyEdit.html */
+#partyEditForm textarea {
+    height: 100px;
+}
+#partyEditForm > fieldset > div {
+    margin-bottom: 5px;
+}
+
+/* Login */
+.form-signin {
+	max-width: 330px;
+	padding: 15px;
+	margin: 0 auto;
+}
+
+.form-signin .form-signin-heading,.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+	font-weight: normal;
+}
+
+.form-signin .form-control {
+	position: relative;
+	font-size: 16px;
+	height: auto;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.form-signin .form-control:focus {
+	z-index: 2;
+}
+
+.form-signin input[type="text"] {
+	margin-bottom: -1px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.form-signin input[type="password"] {
+	/*margin-bottom: 10px;*/
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.form-group {
+	margin-bottom: 0;
+}
+
+.help-block {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.verified-mail {
+	padding: 40px 15px;
+	text-align: center;
+}
+
+/* header manager/admin*/
+.btn-logo {
+	height: 45px;
+	padding-top: 3px !important;
+	padding-bottom:5px !important;
+	
+}
+
+/* userProfile */
+.small {
+    font-size: 0.8em;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.ticket-list td:last-child,
+.ticket-list th:last-child {
+    text-align: center;
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+@media ( min-width : 768px) {
+
+	
+.thumbnail .pull-right-bottom {
+  position: absolute;
+  right: 20px;
+  bottom: 30px;
+}
+
+	/* same height */
+	.thumbnail {
+		min-height: 320px;
+		margin-top: 1.5em;
+	}
+	
+	.thumbnail a.header img {
+    	max-height: 120px;
+    }
+
+	/* Carousel base class */
+	.carousel {
+		margin-bottom: 1.5em;
+		margin-top: 1.5em;
+	}
+
+	/* Bump up size of carousel content */
+	.carousel-caption p {
+		margin-bottom: 20px;
+		font-size: 21px;
+		line-height: 1.4;
+	}
+}
+
+@media ( min-width : 992px) {
+}
+
+
+
+/* RETINA DISPLAY
+-------------------------------------------------- */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5) , only
+	screen and (-min-device-pixel-ratio: 1.5) {
+	body {
+		background-image: url(../img/logo_error.png);
+	}
+}
+
+
+
+
+
+
+#ticket {
+  border: 2px dotted black;
+  height: 225px;
+  width: 600px;
+  margin: 35px;
+}
+#content {
+  height: 185px;
+}
+
+/* qr code */
+#qr-code {
+  float: right;
+  padding: 17px 15px;
+}
+#qr-code > img {
+  height: 150px;
+  width: 150px;
+}
+
+/* event details */
+#details {
+  float: left;
+  width: 405px; 
+  padding-left: 15px;
+}
+#event_data {}
+#event_title {
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#event_date {}
+#event_location {}
+#event_text {
+  overflow: hidden;
+  max-height: 80px;
+  display: block;
+}
+
+/* Footer */
+#ticket-footer {
+  background-color: #f5f5f5;
+  height: 35px;
+  text-align: center;
+}
+#ticket-id {
+  font-size: 0.8em;
+  height: 35px;
+  padding: 10px;
+}
+#cgwap-logo {
+  float: right;
+  margin: 2px;
+}
+#cgwap-logo > img {
+  height: 36px;
+}

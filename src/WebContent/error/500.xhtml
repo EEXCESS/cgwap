@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ticon" />
+
+  <!-- Bootstrap core CSS -->
+  <h:outputStylesheet library="css" name="bootstrap.css" />
+
+  <!-- Custom styles for this template -->
+  <h:outputStylesheet library="css" name="frontend.css" />
+
+  <title>#{msg.error}</title>
+
+</h:head>
+
+<h:body>
+
+  <h:panelGroup layout="block" styleClass="container">
+
+ <h:link outcome="index" class="">
+    <h:graphicImage library="img" name="logo_error.png" alt="" />
+ </h:link>
+
+    <h2>#{msg.error500Title}</h2>
+
+    <p>#{msg.error500Content1}</p>
+    <p>#{msg.error500Content2}</p>
+  </h:panelGroup>
+
+</h:body>
+</html>

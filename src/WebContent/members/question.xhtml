@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough" template="template/layout.xhtml">
+
+
+	<!-- rendered id in url -->
+
+	<!-- start bean initialization -->
+	<f:metadata>
+		<f:viewParam name="questionId" value="#{questionAction.question.id}" />
+		<f:viewAction action="#{questionAction.initQuestion() }" />
+	</f:metadata>
+	<!-- end bean initialization -->
+
+	<ui:define name="title">
+      CGWAP
+    </ui:define>
+
+	<ui:define name="content">
+
+
+		<!-- Not logged in. -->
+		<h:panelGroup rendered="#{!sessionBean.loggedIn}">
+			<p class="lead">#{msg.askNotLoggedInText}</p>
+			<p>
+				<h:link styleClass="btn btn-success" outcome="register" value="#{msg.signup}" />
+			</p>
+		</h:panelGroup>
+
+		<h:form>
+
+			<!-- users question. -->
+			<h:panelGroup rendered="#{sessionBean.loggedIn and questionAction.belongsToUser()}">
+				<h:inputHidden binding="#{questionId}" value="#{questionAction.question.id}"></h:inputHidden>
+				<h2>#{msg.questionHeader}</h2>
+				<br />
+				<br />
+				<!-- Question. -->
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								#{msg.question}: 
+							</h3>
+						</div>
+						<div class="panel-body">#{questionAction.question.questionText}</div>
+
+					</div>
+				</div>
+
+				<!-- Answer Urls. -->
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">#{msg.answerURL}</h3>
+						</div>
+						<div class="panel-body">
+
+							<ol>
+								<ui:repeat var="answer" value="#{questionAction.answerUrl}">
+									<h:panelGroup layout="block">
+										<li><a target="_blank" href="#{answer.answerUrl}">#{msg.possAnswer}</a></li>
+									</h:panelGroup>
+								</ui:repeat>
+							</ol>
+
+
+
+						</div>
+					</div>
+				</div>
+
+
+
+				<!-- Tags. -->
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								#{msg.tags}
+							</h3>
+						</div>
+						<div class="panel-body">
+							<ul>
+								<ui:repeat var="questionTags" value="#{questionAction.questionTags}">
+									<h:panelGroup layout="block">
+										<li>#{questionTags.tag}</li>
+
+									</h:panelGroup>
+								</ui:repeat>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+			</h:panelGroup>
+
+
+		</h:form>
+		<h:panelGroup rendered="#{sessionBean.loggedIn and !questionAction.belongsToUser()}">
+			<div class="jumbotron">
+				<h2 class="lead text-bold">#{msg.notYourQuestion}</h2>
+				<br />
+				<p>
+					<h:link styleClass="btn btn-success" outcome="userProfile" value="#{msg.toTheQuestions}" />
+				</p>
+			</div>
+		</h:panelGroup>
+
+	</ui:define>
+
+</ui:composition>

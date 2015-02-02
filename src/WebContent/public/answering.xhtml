@@ -1,0 +1,387 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough" template="template/layout.xhtml" encoding='UTF-8'>
+
+	<ui:define name="title">
+      CGWAP - #{msg.answering}
+    </ui:define>
+	<script src="main.js"></script>
+
+
+	<ui:define name="content">
+
+		<!-- 		<div id="note">Form has been sent. If you would like to fill out another suggestion, feel free but remember that -->
+		<!-- 			there is an Anti-spam system running.</div> -->
+
+		<!--        <f:metadata> -->
+		<!--            <f:viewParam name="tag" value="#{searchAction.tagToChooseQuestionBy}" /> -->
+		<!--        </f:metadata> -->
+
+		<div class="jumbotron">
+
+			<!-- Not yet logged in. -->
+			<h:panelGroup rendered="#{!sessionBean.loggedIn}">
+				<h2>#{msg.answerHeaderNotAllowed}</h2>
+				<BR />
+				<div class="col-md-10 col-md-offset-1">
+					<p>#{msg.answerNotLoggedInText}</p>
+				</div>
+				<div class="col-md-2 col-md-offset-5">
+					<h:link styleClass="btn btn-success" outcome="register" value="#{msg.signup}" />
+				</div>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{sessionBean.loggedIn}">
+				<!-- Question has to be chosen. -->
+				<h:panelGroup rendered="#{!searchAction.isQuestionIsLoaded()}">
+
+					<!-- Select question by tag. -->
+					<h1>#{msg.answerHeaderText}</h1>
+					<p>#{msg.choose}</p>
+					<h:form  class="well form-horizontal col-md-12" role="form">
+
+						<!-- Available tags. -->
+						<div class="col-md-4 #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+							<h3>#{msg.chooseByTag}</h3>
+							<div class="col-md-10 col-md-offset-1" id="selectbox-tags" >
+								<h:selectOneListbox id="tag_selection" size="4" value="#{searchAction.tagToChooseQuestionBy}"
+									styleClass="form-control">
+									<f:selectItems value="#{searchAction.loadTags()}" var="questionTag" itemValue="#{questionTag.tag}"
+										itemLabel="#{questionTag.tag}" />
+								</h:selectOneListbox>
+							</div>
+						</div>
+						<div class="form-group col-md-4">
+							<h3>#{msg.filter}?</h3>
+							<p>
+								<small>#{msg.useFilter}</small>
+							</p>
+							<h:selectBooleanCheckbox value="#{searchAction.useFilter}"></h:selectBooleanCheckbox>
+							<small>#{msg.goForIt}</small>
+
+						</div>
+
+
+						<br></br>
+
+						<div class="form-group">
+							<h:commandButton action="#{searchAction.loadRandomQuestion()}" id="loadRandom" value="#{msg.loadRandom}"
+								name="ask" type="submit" class="btn btn-success">
+								<f:param name="tag" value="#{searchAction.tagToChooseQuestionBy}" />
+							</h:commandButton>
+
+						</div>
+					</h:form>
+				</h:panelGroup>
+
+
+
+
+				<h:panelGroup rendered="#{searchAction.questionIsLoaded and !searchAction.isMatch() and searchAction.livesLeft > 0}">
+					<!--                Pulse -->
+					<!--                <h2>#{msg.search}</h2> -->
+
+					<div class="col-md-12">
+
+						<!-- Question -->
+						<div class="col-md-7">
+							<div class="panel-question panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">#{msg.question}</h3>
+								</div>
+								<div class="panel-body-question">
+									<span>#{searchAction.question.questionText}</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Time -->
+						<div class="col-md-2">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">#{msg.time}</h3>
+								</div>
+								<div class="panel-body" id="timer-body">#{searchAction.timer}</div>
+							</div>
+						</div>
+
+						<!-- livesLeft left -->
+						<div class="col-md-2">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">#{msg.lives}</h3>
+								</div>
+								<div class="panel-body">
+									<ui:fragment rendered="#{searchAction.livesLeft == 1}">
+										<div class="glyphicon glyphicon-heart"></div>
+									</ui:fragment>
+									<ui:fragment rendered="#{searchAction.livesLeft == 2}">
+										<div class="glyphicon glyphicon-heart"></div>
+										<div class="glyphicon glyphicon-heart"></div>
+									</ui:fragment>
+									<ui:fragment rendered="#{searchAction.livesLeft == 3}">
+										<div class="glyphicon glyphicon-heart"></div>
+										<div class="glyphicon glyphicon-heart"></div>
+										<div class="glyphicon glyphicon-heart"></div>
+									</ui:fragment>
+								</div>
+							</div>
+						</div>
+						<!-- Cancel or Report -->
+						<div class="btn-group-vertical col-md-1">
+							<h:form>
+								<h:commandButton action="#{searchAction.cancel()}" value="#{msg.cancel}" name="check" type="submit"
+									class="btn btn-danger btn-xs ">
+								</h:commandButton>
+								<h:commandButton action="#{searchAction.report()}" value="#{msg.report}" name="check" type="submit"
+									class="btn btn-warning btn-xs">
+								</h:commandButton>
+							</h:form>
+						</div>
+
+					</div>
+
+
+
+					<!--             Results loaded.  -->
+
+					<h:panelGroup rendered="#{searchAction.hasResults and searchAction.livesLeft > 0}">
+						<!--                Pulse -->
+						<!--                <h2>#{msg.search}</h2> -->
+
+						<!-- Results -->
+						<h:form>
+							<div class="col-md-12 ">
+								<div class="panel-heading">
+									<h3 class="panel-title">#{msg.results}</h3>
+								</div>
+								<div class="panel-body">
+									<ul>
+										<ui:repeat var="result" value="#{searchAction.results}">
+											<div class="col-md-3">
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<h3 class="panel-title">#{result.title}</h3>
+													</div>
+													<div class="panel-body">
+														<ui:fragment rendered="#{not empty result.preview}">
+															<img src="#{result.preview}" alt="#{result.title}"></img>
+														</ui:fragment>
+														<div>
+															<ui:fragment rendered="#{empty result.preview}">
+																<extra-small>No preview available.</extra-small>
+															</ui:fragment>
+														</div>
+														<!-- 													<extra-small>#{result.description}</extra-small><BR /> -->
+														<ui:fragment rendered="#{result.isText()}">
+															<small><span class="pull-right glyphicon glyphicon-list-alt" title="Text"></span></small>
+														</ui:fragment>
+														<ui:fragment rendered="#{result.isImage()}">
+															<small><span class="pull-right glyphicon glyphicon-picture" title="Image"></span></small>
+														</ui:fragment>
+														<ui:fragment rendered="#{result.isVideo()}">
+															<small><span class="pull-right glyphicon glyphicon-film" title="Video"></span></small>
+														</ui:fragment>
+														<ui:fragment rendered="#{result.isSound()}">
+															<small><span class="pull-right glyphicon glyphicon-headphones" title="Sound"></span></small>
+														</ui:fragment>
+														<!-- check button   -->
+														<BR />
+													</div>
+													<h:commandButton action="#{searchAction.check(result)}" id="check" value="#{msg.check}" name="check"
+														type="submit" class="btn btn-block btn-check panel-footer">
+													</h:commandButton>
+
+												</div>
+											</div>
+										</ui:repeat>
+									</ul>
+								</div>
+							</div>
+						</h:form>
+					</h:panelGroup>
+
+					<!-- search input field -->
+					<h:form>
+						<div class="well well-cgwap col-md-12">
+
+							<div class="col-md-8 col-md-offset-2">
+								<h3 class="panel-title">#{msg.query}</h3>
+								<h:inputText value="#{searchAction.searchQuery.query}" id="searchQuery" class="form-control" required="true"
+									requiredMessage="#{msg.queryRequired}">
+								</h:inputText>
+								<h4>
+									<h:message class="label label-warning" for="searchQuery" />
+									<br></br>
+								</h4>
+							</div>
+							<br></br>
+
+							<h:panelGroup rendered="#{searchAction.useFilter}">
+								<br></br>
+								<h2 class="lead">#{msg.filter}</h2>
+								<!-- media type filter -->
+								<div class="col-md-2 col-md-offset-2">
+									<div class="form-group #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+										<h3 class="panel-title">#{msg.type}</h3>
+										<h:selectOneListbox id="type_selection" size="4" value="#{searchAction.typeFilter}" styleClass="form-control">
+											<f:selectItems value="#{searchAction.types}" var="type" itemValue="#{type}" itemLabel="#{type}" />
+										</h:selectOneListbox>
+
+									</div>
+									<h:message for="type_selection" />
+								</div>
+
+								<!-- language filter -->
+								<div class="col-md-2 col-md-offset-1">
+									<div class="form-group #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+										<h3 class="panel-title">#{msg.language}</h3>
+										<h:selectOneListbox id="language_selection" size="4" value="#{searchAction.languageFilter}"
+											styleClass="form-control">
+											<f:selectItems value="#{searchAction.languages}" var="language" itemValue="#{language}"
+												itemLabel="#{language}" />
+										</h:selectOneListbox>
+
+									</div>
+									<h:message for="language_selection" />
+								</div>
+
+								<!-- country filter -->
+								<div class="col-md-2 col-md-offset-1">
+									<div class="form-group #{sessionBean.hasErrorMessage ? 'has-error' : ''}">
+										<h3 class="panel-title">#{msg.provider}</h3>
+										<h:selectOneListbox id="country_selection" size="4" value="#{searchAction.countryFilter}"
+											styleClass="form-control">
+											<f:selectItems value="#{searchAction.countries}" var="country" itemValue="#{country}" itemLabel="#{country}" />
+										</h:selectOneListbox>
+
+									</div>
+									<h:message for="country_selection" />
+								</div>
+
+							</h:panelGroup>
+							<!-- search button   -->
+							<h:commandButton action="#{searchAction.search()}" id="search" value="#{msg.search}" name="search" type="submit"
+								class="btn btn-block btn-info">
+							</h:commandButton>
+
+						</div>
+					</h:form>
+				</h:panelGroup>
+
+				<!-- Done! -->
+				<h:panelGroup rendered="#{searchAction.isMatch() and !searchAction.isQuestionHasFollowUpQuestion()}">
+					<h:form>
+
+						<h1>#{msg.match}</h1>
+                    #{msg.xp}#{searchAction.currentRound.score}XP! #{userAction.getXpToGo()} to go until you become a #{userAction.getNextLevel()}!  
+                    <BR />
+						<div class="col-md-6 col-md-offset-3">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">#{searchAction.question.questionText}</h3>
+								</div>
+								<div class="panel-body">
+									<ui:fragment rendered="#{not empty searchAction.matchingResult.preview}">
+										<img src="#{searchAction.matchingResult.preview}"></img>
+									</ui:fragment>
+									<ui:fragment rendered="#{empty searchAction.matchingResult.preview}">
+										<extra-small>#{msg.preview}</extra-small>
+									</ui:fragment>
+									<BR />
+									<ui:fragment rendered="#{not empty searchAction.matchingResult.id}">
+										<a target="_blank" href="http://www.europeana.eu/portal/record/#{searchAction.matchingResult.id}.html">
+											#{searchAction.matchingResult.title}</a> on Europeana.eu
+                            </ui:fragment>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-md-offset-3">
+
+							<h:commandLink class="center btn btn-lg btn-warning" action="#{searchAction.loadRandomQuestion()}">#{msg.goAgain} #{msg.nextOne}</h:commandLink>
+						</div>
+					</h:form>
+				</h:panelGroup>
+
+
+				<!-- Intermediate result in case of followUps. -->
+				<h:panelGroup rendered="#{searchAction.isMatch() and searchAction.isQuestionHasFollowUpQuestion()}">
+					<h:form>
+
+						<h1>#{msg.match}</h1>
+						<BR />
+						<div class="col-md-6 col-md-offset-3">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">#{searchAction.question.questionText}</h3>
+								</div>
+								<div class="panel-body">
+									<ui:fragment rendered="#{not empty searchAction.matchingResult.preview}">
+										<img src="#{searchAction.matchingResult.preview}"></img>
+									</ui:fragment>
+									<ui:fragment rendered="#{empty searchAction.matchingResult.preview}">
+										<extra-small>#{msg.preview}</extra-small>
+									</ui:fragment>
+									<BR />
+									<ui:fragment rendered="#{not empty searchAction.matchingResult.id}">
+                                            #{searchAction.matchingResult.title}</ui:fragment>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-md-offset-3">
+
+							<h:commandLink class="center btn btn-lg btn-info" action="#{searchAction.loadFollowUpQuestion()}">#{msg.loadFollowUp}</h:commandLink>
+						</div>
+					</h:form>
+				</h:panelGroup>
+
+
+				<h:panelGroup rendered="#{searchAction.livesLeft == 0}">
+					<h:form>
+						<h2>#{msg.fail}</h2>
+
+
+						<div class="col-md-12">
+							<h:commandLink class="center btn btn-lg btn-warning" action="#{searchAction.loadRandomQuestion}"> #{msg.goAgain} #{msg.nextOne}</h:commandLink>
+						</div>
+
+						<ui:fragment rendered="#{!searchAction.rated}">
+
+							<p>#{msg.tooHard}</p>
+							<div class="panel-heading">
+								<h3 class="panel-title">#{searchAction.question.questionText}</h3>
+							</div>
+
+							<div class="star-rating">
+								<h:form>
+
+									<span class="fa fa-star-o" data-rating="1"></span>
+									<span class="fa fa-star-o" data-rating="2"></span>
+									<span class="fa fa-star-o" data-rating="3"></span>
+									<span class="fa fa-star-o" data-rating="4"></span>
+									<span class="fa fa-star-o" data-rating="5"></span>
+									<input type="hidden" name="rating" id="data-rating" class="rating-value" value="3"></input>
+									<div>
+										<h:commandButton action="#{searchAction.changeRating()}" id="rate" value="#{msg.rate}" name="rate"
+											type="submit" class="btn  btn-info">
+										</h:commandButton>
+									</div>
+								</h:form>
+							</div>
+						</ui:fragment>
+					</h:form>
+				</h:panelGroup>
+
+
+
+				<!-- logged in -->
+			</h:panelGroup>
+
+
+
+
+		</div>
+
+	</ui:define>
+
+</ui:composition>

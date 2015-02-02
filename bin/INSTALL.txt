@@ -1,0 +1,33 @@
+# install tomcat and postgresql
+sudo apt-get install tomcat7 postgresql
+sudo apt-get install pgadmin3 tomcat7-manager
+
+# start postgresql server
+sudo /etc/init.d/postgresql start
+
+## setup postgres
+#change username for postgres user 
+sudo -u postgres psql postgres
+\password postgres
+
+## pgadmin3, create user and database
+connection setting localhost: 5432
+user: postgres pwd: PWD
+- add user cgwapuser with password cgwapPW
+- add database cgwap with owner cgwapuser
+
+## edit configuration
+DB_HOST = localhost
+DB_PORT = 5432
+DB_NAME = cgwap
+DB_USER = cgwapuser
+DB_PASS = cgwapPW
+
+# start tomcat and postgresql server
+sudo /etc/init.d/tomcat7 restart
+
+# deploy war file
+copy CGWAP.war to /var/lib/tomcat7/webapps
+
+# open browser 
+http://127.0.0.1:8080/CGWAP/

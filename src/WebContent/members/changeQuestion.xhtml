@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough" template="template/layout.xhtml">
+
+
+
+	<!-- start bean initialization -->
+	<f:metadata>
+		<f:viewParam name="questionId" value="#{questionAction.question.id}" required="true" />
+		<f:viewAction action="#{questionAction.initQuestion()}" />
+	</f:metadata>
+	<!-- end bean initialization -->
+
+	<ui:define name="title">
+      CGWAP
+    </ui:define>
+
+	<ui:define name="content">
+
+		<!-- Not logged in. -->
+		<h:panelGroup rendered="#{!sessionBean.loggedIn}">
+			<p class="lead">#{msg.askNotLoggedInText}</p>
+			<p>
+				<h:link styleClass="btn btn-success" outcome="register" value="#{msg.signup}" />
+			</p>
+		</h:panelGroup>
+
+		<!-- Not users question. -->
+		<h:panelGroup rendered="#{sessionBean.loggedIn and !questionAction.belongsToUser()}">
+			<div class="jumbotron">
+				<h2 class="lead text-bold">#{msg.notYourQuestion}</h2>
+				<br />
+				<p>
+					<h:link styleClass="btn btn-success" outcome="userProfile" value="#{msg.toTheQuestions}" />
+				</p>
+			</div>
+		</h:panelGroup>
+
+		<!-- Logged in. -->
+		<h:panelGroup rendered="#{sessionBean.loggedIn and questionAction.belongsToUser()}">
+			<h2>#{msg.questionHeader}</h2>
+			<br />
+			<br />
+
+			<!-- Question. -->
+			<h:form>
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">#{msg.question}:</h3>
+						</div>
+						<div class="panel-body">#{questionAction.question.questionText}</div>
+						<div class="panel-body">
+							#{msg.questionChange}
+
+							<div class="input-group">
+								<h:inputText binding="#{newQuestionText}" id="newQuestionText" class="form-control">
+								    <f:validator validatorId="questionExistsValidator" />
+								</h:inputText>
+								<span class="input-group-btn"> <h:commandButton
+										action="#{questionAction.updateQuestion(newQuestionText.value)}" id="updateQuestion" value="#{msg.change}"
+										name="updateQuestion" type="submit" class="btn btn-info">
+									</h:commandButton>
+								</span>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+
+
+
+
+			<!-- Answer Urls. -->
+			<h:form>
+				<div class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">#{msg.answerURL}:</h3>
+						</div>
+						<div class="panel-body">
+
+							<ol>
+								<ui:repeat var="answer" value="#{questionAction.answerUrl}">
+									<h:panelGroup layout="block">
+										<li><a target="_blank" href="#{answer.answerUrl}">#{msg.possAnswer}</a> <h:commandLink
+												styleClass="glyphicon glyphicon-remove pull-right" action="#{questionAction.removeAnswer(answer)}">
+											</h:commandLink></li>
+									</h:panelGroup>
+								</ui:repeat>
+							</ol>
+						</div>
+
+
+						<div class="panel-body">
+							#{msg.answerChange}
+							<div class="input-group">
+
+
+								<h:inputText id="newAnswerUrl" binding="#{newAnswerUrl}" class="form-control">
+								</h:inputText>
+								<span class="input-group-btn"> <h:commandButton label="#{msg.changeAnswer}"
+										action="#{questionAction.addAnswerUrl(newAnswerUrl.value)}" id="updateAnswerUrls" value="#{msg.add}"
+										name="updateAnswerUrls" type="submit" class="btn btn-warning">
+									</h:commandButton></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</h:form>
+
+
+			<!-- Tags. -->
+
+			<h:form>
+				<div class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">#{msg.tags}:</h3>
+						</div>
+						<div class="panel-body">
+							<ul>
+								<ui:repeat var="questionTags" value="#{questionAction.questionTags}">
+									<h:panelGroup layout="block">
+										<li>#{questionTags.tag} <h:commandLink styleClass="glyphicon glyphicon-remove pull-right"
+												action="#{questionAction.removeTag(questionTags)}">
+											</h:commandLink></li>
+
+									</h:panelGroup>
+								</ui:repeat>
+							</ul>
+						</div>
+						<div class="panel-body">
+							#{msg.tagChange}
+							<div class="input-group">
+								<h:inputText id="newTag" binding="#{newTag}" class="form-control">
+								</h:inputText>
+								<span class="input-group-btn"> <h:commandButton action="#{questionAction.addTag(newTag.value)}"
+										id="updateTags" value="#{msg.add}" name="updateTags" type="submit" class="btn btn-info">
+									</h:commandButton>
+								</span>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+			<!-- Tags. -->
+
+			<h:form>
+				<div class="col-md-2">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">#{msg.ratingChange}:</h3>
+						</div>
+						<div class="panel-body">
+							<h:panelGroup layout="block">
+								<div class="star-rating">
+									<h:form>
+										<span class="fa fa-star-o" data-rating="1"></span>
+										<span class="fa fa-star-o" data-rating="2"></span>
+										<span class="fa fa-star-o" data-rating="3"></span>
+										<span class="fa fa-star-o" data-rating="4"></span>
+										<span class="fa fa-star-o" data-rating="5"></span>
+										<input type="hidden" name="rating" id="data-rating" class="rating-value"
+											value="#{questionAction.question.difficultyRating}"></input>
+										<div>
+											<h:commandButton action="#{questionAction.changeRating()}" id="rate" value="#{msg.change}" name="rate" type="submit"
+												class="btn  btn-info">
+											</h:commandButton>
+										</div>
+									</h:form>
+								</div>
+
+							</h:panelGroup>
+						</div>
+
+					</div>
+				</div>
+			</h:form>
+
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>
