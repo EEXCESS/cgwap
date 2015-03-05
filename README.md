@@ -1,7 +1,7 @@
 # cgwap A cultural game with a purpose
 
 
-see http://mics.fim.uni-passau.de/CGWAP/for a test instance of the game. 
+see http://mics.fim.uni-passau.de/CGWAP/ for a test instance of the game. 
 
 ## Installation instructions:
 
