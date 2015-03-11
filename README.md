@@ -1,12 +1,19 @@
-# cgwap A cultural game with a purpose
+# CGWAP - A Cultural Game With A Purpose
+This question & answering game engages players with the tremendous collection of European cultural heritage objects in [Europeana](http://www.europeana.eu "Europeana").
 
+Players can pose questions that are answered by Europeana
+resources. When posing a question, the asking player needs
+to provide the correct answers as URLs to Europeana resources. Other players can then try to answer the question by searching via an interface to Europeana.
 
-see http://mics.fim.uni-passau.de/CGWAP/ for a test instance of the game. 
+## Live Demo:
+A live demo of the game is available at http://mics.fim.uni-passau.de/CGWAP/
 
 ## Installation instructions:
+CGWAP requires an instance of the Apache Tomcat Web Server with a Java Runtime Environment version 7 or higher and a PostgreSQL database (version 9.0).  
+The database connection settings and credentials can be specified in WEB-INF/config.properties.  
+Afterwards, the WAR file can be deployed as usual.
 
-Installing CGWAP requires an instance of the Apache Tomcat Web Server with a Java Runtime Environment version 7 or higher. The WAR file of the game must be placed in the webapps directory.
-In addition, a PostgreSQL database is required (version 9.0). CGWAP automatically initializes its tables, it must, however, after the first deployment credentials in the unzipped area of ​​application are defined once in CGWAPs config.properties file. It also can specify the admin user and the login.
-In addition to these steps means it is necessary to make sure that the application using the deployment descriptor 'CGWAP' on the server must be running for the paths can be correctly resolved to game resources. However, this should be the case usually automatic, but can be used in more complex situations relevant web server (Apache/nginx servers to upstream about proxy forwarding).
+## Rationale for game mechanics
+The concept, ideas and rationale for the game mechanics and design choices are explained in more detail in "A Game with a Purpose to Access Europe's Cultural Treasure", J. Schlötterer, C.Seifert, L. Wagner and M. Granitzer (to appear in GamifIR '15, link will be added after publication).
 
 
