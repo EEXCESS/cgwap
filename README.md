@@ -14,6 +14,6 @@ The database connection settings and credentials can be specified in WEB-INF/con
 Afterwards, the WAR file can be deployed as usual.
 
 ## Rationale for game mechanics
-The concept, ideas and rationale for the game mechanics and design choices are explained in more detail in ["A Game with a Purpose to Access Europe's Cultural Treasure"](gamifir.pdf) [J. Schlötterer, C.Seifert, L. Wagner and M. Granitzer, GamifIR '15]
+The concept, ideas and rationale for the game mechanics and design choices are explained in more detail in ["A Game with a Purpose to Access Europe's Cultural Treasure"](http://eexcess.github.io/cgwap/gamifir.pdf) [J. Schlötterer, C.Seifert, L. Wagner and M. Granitzer, GamifIR '15]
 
 
