@@ -5,7 +5,7 @@ Players can pose questions that are answered by Europeana
 resources. When posing a question, the asking player needs
 to provide the correct answers as URLs to Europeana resources. Other players can then try to answer the question by searching via an interface to Europeana.
 
-## Live Demo:
+## Live Demo
 A live demo of the game is available at http://mics.fim.uni-passau.de/CGWAP/
 
 ## Installation instructions:
